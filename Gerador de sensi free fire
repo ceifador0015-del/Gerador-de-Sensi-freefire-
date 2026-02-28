@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Sensibilidade FF</title>
+
+<style>
+body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg,#111,#1f1f1f,#000);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    background:#1c1c1c;
+    padding:25px;
+    border-radius:15px;
+    width:320px;
+    box-shadow:0 0 20px #00ff88;
+}
+
+h2{
+    text-align:center;
+    color:#00ff88;
+}
+
+select,input{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+    font-size:15px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:15px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:bold;
+    background:#00ff88;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#00cc6a;
+}
+
+.resultado{
+    margin-top:15px;
+    background:#111;
+    padding:10px;
+    border-radius:10px;
+    display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>GERADOR DE SENSI FF</h2>
+
+<label>Marca do Celular</label>
+<select id="marca">
+    <option value="xiaomi">Xiaomi</option>
+    <option value="samsung">Samsung</option>
+    <option value="motorola">Motorola</option>
+    <option value="iphone">iPhone</option>
+    <option value="outro">Outro</option>
+</select>
+
+<label>DPI Atual</label>
+<input type="number" id="dpi" placeholder="Ex: 411">
+
+<button onclick="gerarSensi()">GERAR SENSIBILIDADE</button>
+
+<div class="resultado" id="resultado"></div>
+
+</div>
+
+<script>
+function gerarSensi(){
+
+    let marca = document.getElementById("marca").value;
+    let dpi = parseInt(document.getElementById("dpi").value);
+
+    if(!dpi){
+        alert("Digite uma DPI válida!");
+        return;
+    }
+
+    let baseGeral = 100;
+    let redDot = 90;
+    let mira2x = 80;
+    let mira4x = 70;
+    let awm = 50;
+    let livre = 95;
+
+    // Ajuste baseado na DPI
+    let ajuste = dpi / 400;
+
+    // Ajuste por marca
+    if(marca === "xiaomi"){ ajuste *= 1.05; }
+    if(marca === "samsung"){ ajuste *= 1.00; }
+    if(marca === "motorola"){ ajuste *= 0.95; }
+    if(marca === "iphone"){ ajuste *= 0.90; }
+
+    let geralFinal = Math.min(200, Math.round(baseGeral * ajuste));
+    let redFinal = Math.min(200, Math.round(redDot * ajuste));
+    let mira2Final = Math.min(200, Math.round(mira2x * ajuste));
+    let mira4Final = Math.min(200, Math.round(mira4x * ajuste));
+    let awmFinal = Math.min(200, Math.round(awm * ajuste));
+    let livreFinal = Math.min(200, Math.round(livre * ajuste));
+
+    let resultado = `
+        <b>RESULTADO:</b><br><br>
+        🎯 Geral: ${geralFinal}<br>
+        🔴 Red Dot: ${redFinal}<br>
+        🔭 Mira 2x: ${mira2Final}<br>
+        🔎 Mira 4x: ${mira4Final}<br>
+        🎯 AWM: ${awmFinal}<br>
+        👆 Olhadinha Livre: ${livreFinal}
+    `;
+
+    document.getElementById("resultado").style.display = "block";
+    document.getElementById("resultado").innerHTML = resultado;
+}
+</script>
+
+</body>
+</html>
